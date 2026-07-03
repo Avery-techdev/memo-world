@@ -3,12 +3,91 @@
 /* Design tokens – black-and-white photography / polaroid aesthetic.
    Single source of truth for colors (see guidelines: centralized design tokens). */
 @theme {
-  --color-stage: #0a0a0a;
-  --color-card-back: #1a1a1a;
-  --color-card-back-line: #222222;
-  --color-card-face: #111111;
-  --color-ui-text: #f5f5f5;
-  --color-accent: #e8e8e8;
+  --color-stage: #050505;
+  --color-card-back: #1e1e1e;
+  --color-card-back-line: #3a3a3a;
+  --color-card-face: #171717;
+  --color-ui-text: #fafafa;
+  --color-ui-muted: #9a9a9a;
+  --color-accent: #ffffff;
+
+  /* One-shot white glow when a pair is matched. */
+  --animate-match-glow: match-glow 700ms ease-out;
+  /* Staggered entrance when a board is dealt (delay set per card inline). */
+  --animate-deal-in: deal-in 450ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  /* Short shake when a mismatched pair is revealed. */
+  --animate-shake: shake 380ms ease-in-out;
+}
+
+@keyframes match-glow {
+  0% {
+    box-shadow: 0 0 0 0 rgba(245, 245, 245, 0);
+  }
+  35% {
+    box-shadow: 0 0 22px 4px rgba(245, 245, 245, 0.55);
+  }
+  100% {
+    box-shadow: 0 0 10px 0 rgba(245, 245, 245, 0.18);
+  }
+}
+
+@keyframes deal-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px) scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  20% {
+    transform: translateX(-5px);
+  }
+  40% {
+    transform: translateX(5px);
+  }
+  60% {
+    transform: translateX(-3px);
+  }
+  80% {
+    transform: translateX(3px);
+  }
+}
+
+/* Soft key light behind the board so it reads as a lit stage. */
+@utility board-glow {
+  background: radial-gradient(ellipse 62% 58% at 50% 42%, rgba(255, 255, 255, 0.1), transparent 72%);
+}
+
+/* Fine animated film grain for an analog black-and-white photo feel. */
+@utility film-grain {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: grain 700ms steps(3) infinite;
+}
+
+@keyframes grain {
+  0% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(-3%, 2%);
+  }
+  100% {
+    transform: translate(2%, -3%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .film-grain {
+    animation: none;
+  }
 }
 
 :root {
@@ -25,10 +104,28 @@
   );
 }
 
+/* Card depth: drop shadow plus a top light highlight (lit from above). */
+@utility card-elevation {
+  box-shadow:
+    0 16px 36px -12px rgba(0, 0, 0, 0.9),
+    0 4px 10px -4px rgba(0, 0, 0, 0.7),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+@utility card-elevation-hover {
+  box-shadow:
+    0 26px 50px -12px rgba(0, 0, 0, 0.95),
+    0 8px 16px -6px rgba(0, 0, 0, 0.8),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
 body {
   margin: 0;
   min-height: 100dvh;
   background-color: var(--color-stage);
+  /* Vignette so the board reads as a lit stage against near-black. */
+  background-image: radial-gradient(ellipse 90% 70% at 50% 18%, #1a1a1a 0%, #0b0b0b 40%, var(--color-stage) 75%);
+  background-attachment: fixed;
   color: var(--color-ui-text);
   font-family:
     ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;

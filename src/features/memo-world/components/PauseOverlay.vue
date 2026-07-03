@@ -21,19 +21,19 @@ const emit = defineEmits<{ resume: []; restart: []; quit: [] }>();
 
       <dl class="grid grid-cols-2 gap-4 text-left tabular-nums">
         <div>
-          <dt class="text-[10px] uppercase tracking-widest text-ui-text/50">Points</dt>
+          <dt class="text-[10px] uppercase tracking-widest text-ui-muted">Points</dt>
           <dd class="text-xl font-light">{{ points }}</dd>
         </div>
         <div>
-          <dt class="text-[10px] uppercase tracking-widest text-ui-text/50">Time</dt>
+          <dt class="text-[10px] uppercase tracking-widest text-ui-muted">Time</dt>
           <dd class="text-xl font-light">{{ formatDuration(timeElapsedSeconds) }}</dd>
         </div>
         <div>
-          <dt class="text-[10px] uppercase tracking-widest text-ui-text/50">Pairs</dt>
+          <dt class="text-[10px] uppercase tracking-widest text-ui-muted">Pairs</dt>
           <dd class="text-xl font-light">{{ matchedPairs }} / {{ totalPairs }}</dd>
         </div>
         <div>
-          <dt class="text-[10px] uppercase tracking-widest text-ui-text/50">Attempts</dt>
+          <dt class="text-[10px] uppercase tracking-widest text-ui-muted">Attempts</dt>
           <dd class="text-xl font-light">{{ attempts }}</dd>
         </div>
       </dl>

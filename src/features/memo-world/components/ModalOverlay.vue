@@ -86,7 +86,7 @@ onBeforeUnmount(() => {
         aria-modal="true"
         :aria-labelledby="labelledby"
         tabindex="-1"
-        class="w-full max-w-md rounded-sm border border-card-back-line bg-card-face p-8 text-ui-text shadow-2xl focus:outline-none"
+        class="card-elevation w-full max-w-md rounded-sm border border-card-back-line bg-card-face p-8 text-ui-text focus:outline-none"
       >
         <slot />
       </div>

@@ -26,26 +26,26 @@ const title = computed(() => (props.won ? "You Win" : "Time's Up"));
       <div class="flex flex-col gap-1">
         <h2 id="gameover-title" class="text-2xl font-light uppercase tracking-[0.3em]">{{ title }}</h2>
         <p v-if="isNewHighscore" class="text-xs uppercase tracking-widest text-white">New highscore</p>
-        <p v-else-if="bestPoints !== null" class="text-xs uppercase tracking-widest text-ui-text/50">
+        <p v-else-if="bestPoints !== null" class="text-xs uppercase tracking-widest text-ui-muted">
           Best {{ bestPoints }} pts
         </p>
       </div>
 
       <dl class="grid grid-cols-2 gap-4 text-left tabular-nums">
         <div>
-          <dt class="text-[10px] uppercase tracking-widest text-ui-text/50">Points</dt>
+          <dt class="text-[10px] uppercase tracking-widest text-ui-muted">Points</dt>
           <dd class="text-xl font-light">{{ points }}</dd>
         </div>
         <div>
-          <dt class="text-[10px] uppercase tracking-widest text-ui-text/50">Time</dt>
+          <dt class="text-[10px] uppercase tracking-widest text-ui-muted">Time</dt>
           <dd class="text-xl font-light">{{ formatDuration(timeElapsedSeconds) }}</dd>
         </div>
         <div>
-          <dt class="text-[10px] uppercase tracking-widest text-ui-text/50">Pairs</dt>
+          <dt class="text-[10px] uppercase tracking-widest text-ui-muted">Pairs</dt>
           <dd class="text-xl font-light">{{ matchedPairs }} / {{ totalPairs }}</dd>
         </div>
         <div>
-          <dt class="text-[10px] uppercase tracking-widest text-ui-text/50">Attempts</dt>
+          <dt class="text-[10px] uppercase tracking-widest text-ui-muted">Attempts</dt>
           <dd class="text-xl font-light">{{ attempts }}</dd>
         </div>
       </dl>

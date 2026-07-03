@@ -1,11 +1,18 @@
 import { computed, onUnmounted, ref, type ComputedRef } from "vue";
-import type { Card, GameStatus, HighscoreEntry, Level, LevelConfig } from "@/features/memo-world/types";
+import type {
+  Card,
+  GameStatus,
+  HighscoreEntry,
+  Highscores,
+  Level,
+  LevelConfig,
+} from "@/features/memo-world/types";
 import { LEVELS } from "@/features/memo-world/config/levels";
 import { LANDMARKS } from "@/features/memo-world/config/landmarks";
 import { gameStorageService } from "@/features/memo-world/services/gameStorageService";
 
 /** Delay before two non-matching cards flip back, in milliseconds. */
-const MISMATCH_FLIP_BACK_MS = 900;
+const MISMATCH_FLIP_BACK_MS = 1200;
 /** Timer tick interval in milliseconds. */
 const TICK_MS = 1000;
 
@@ -58,6 +65,13 @@ export interface UseMemoryGame {
   readonly isBoardComplete: ComputedRef<boolean>;
   readonly isInteractionLocked: ComputedRef<boolean>;
   readonly isNewHighscore: ComputedRef<boolean>;
+  /** True while a mismatched pair is shown before flipping back. */
+  readonly isResolving: ComputedRef<boolean>;
+  /** Increments on every deal; used to replay the deal-in animation. */
+  readonly roundId: ComputedRef<number>;
+  /** Highscore table, kept in sync with persisted storage (single source of truth: the service). */
+  readonly highscores: ComputedRef<Highscores>;
+  readonly bestPoints: ComputedRef<number | null>;
   // Actions (only way to mutate state).
   startGame(level: Level): void;
   restartGame(): void;
@@ -80,15 +94,15 @@ export function useMemoryGame(): UseMemoryGame {
   const status = ref<GameStatus>("idle");
   const isResolving = ref(false);
   const isNewHighscoreRef = ref(false);
+  const roundId = ref(0);
+  const highscoresRef = ref<Highscores>(gameStorageService.getHighscores());
 
   let timerId: ReturnType<typeof setInterval> | null = null;
   let flipBackId: ReturnType<typeof setTimeout> | null = null;
 
   const config = computed<LevelConfig>(() => LEVELS[level.value]);
   const totalPairs = computed(() => config.value.pairs);
-  const matchedPairs = computed(
-    () => cards.value.filter((card) => card.isMatched).length / 2,
-  );
+  const matchedPairs = computed(() => cards.value.filter((card) => card.isMatched).length / 2);
   const flippedCards = computed(() =>
     cards.value.filter((card) => card.isFlipped && !card.isMatched),
   );
@@ -96,12 +110,11 @@ export function useMemoryGame(): UseMemoryGame {
     Math.max(0, config.value.timeLimitSeconds - timeElapsedSeconds.value),
   );
   const isBoardComplete = computed(() => matchedPairs.value === totalPairs.value);
-  const points = computed(
-    () => matchedPairs.value * pointsPerPair(attempts.value, config.value),
-  );
+  const points = computed(() => matchedPairs.value * pointsPerPair(attempts.value, config.value));
   const isInteractionLocked = computed(
     () => status.value !== "playing" || isResolving.value || flippedCards.value.length >= 2,
   );
+  const bestPoints = computed(() => highscoresRef.value[level.value]?.points ?? null);
 
   function clearTimers(): void {
     if (timerId !== null) {
@@ -138,6 +151,7 @@ export function useMemoryGame(): UseMemoryGame {
         achievedAt: new Date().toISOString(),
       };
       isNewHighscoreRef.value = gameStorageService.saveHighscore(level.value, entry);
+      highscoresRef.value = gameStorageService.getHighscores();
     }
   }
 
@@ -171,6 +185,7 @@ export function useMemoryGame(): UseMemoryGame {
     timeElapsedSeconds.value = 0;
     isResolving.value = false;
     isNewHighscoreRef.value = false;
+    roundId.value += 1;
     status.value = "playing";
     startTimer();
   }
@@ -217,6 +232,7 @@ export function useMemoryGame(): UseMemoryGame {
     isResolving.value = false;
     isNewHighscoreRef.value = false;
     status.value = "idle";
+    highscoresRef.value = gameStorageService.getHighscores();
   }
 
   onUnmounted(clearTimers);
@@ -235,6 +251,10 @@ export function useMemoryGame(): UseMemoryGame {
     isBoardComplete,
     isInteractionLocked,
     isNewHighscore: computed(() => isNewHighscoreRef.value),
+    isResolving: computed(() => isResolving.value),
+    roundId: computed(() => roundId.value),
+    highscores: computed(() => highscoresRef.value),
+    bestPoints,
     startGame,
     restartGame,
     flipCard,
