@@ -6,6 +6,8 @@
 // Re-exports are added in the following steps:
 //   export { default as LevelSelect } from "./components/LevelSelect.vue";
 
+export { default as LandmarkIllustration } from "./illustrations/LandmarkIllustration.vue";
+
 export { useMemoryGame } from "./composables/useMemoryGame";
 export type { UseMemoryGame } from "./composables/useMemoryGame";
 export { gameStorageService } from "./services/gameStorageService";

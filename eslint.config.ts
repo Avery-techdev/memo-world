@@ -22,5 +22,13 @@ export default [
       "@typescript-eslint/no-unused-vars": "error",
     },
   },
+  {
+    // Landmark illustrations are intentionally named after proper nouns.
+    name: "app/illustrations",
+    files: ["src/features/memo-world/illustrations/**/*.vue"],
+    rules: {
+      "vue/multi-word-component-names": "off",
+    },
+  },
   skipFormatting,
 ];
