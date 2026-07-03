@@ -6,7 +6,8 @@
 // Re-exports are added in the following steps:
 //   export { default as LevelSelect } from "./components/LevelSelect.vue";
 
-export { default as LandmarkIllustration } from "./illustrations/LandmarkIllustration.vue";
+// The container is the single UI entry point of the feature.
+export { default as MemoryWorld } from "./components/MemoryWorld.vue";
 
 export { useMemoryGame } from "./composables/useMemoryGame";
 export type { UseMemoryGame } from "./composables/useMemoryGame";

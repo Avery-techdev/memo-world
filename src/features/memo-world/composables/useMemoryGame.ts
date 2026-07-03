@@ -64,6 +64,7 @@ export interface UseMemoryGame {
   flipCard(cardId: number): void;
   pauseGame(): void;
   resumeGame(): void;
+  exitToMenu(): void;
 }
 
 /**
@@ -208,6 +209,16 @@ export function useMemoryGame(): UseMemoryGame {
     startTimer();
   }
 
+  function exitToMenu(): void {
+    clearTimers();
+    cards.value = [];
+    attempts.value = 0;
+    timeElapsedSeconds.value = 0;
+    isResolving.value = false;
+    isNewHighscoreRef.value = false;
+    status.value = "idle";
+  }
+
   onUnmounted(clearTimers);
 
   return {
@@ -229,5 +240,6 @@ export function useMemoryGame(): UseMemoryGame {
     flipCard,
     pauseGame,
     resumeGame,
+    exitToMenu,
   };
 }
