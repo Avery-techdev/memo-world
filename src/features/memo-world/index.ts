@@ -6,6 +6,17 @@
 // Re-exports are added in the following steps:
 //   export { default as LevelSelect } from "./components/LevelSelect.vue";
 //   export { useMemoryGame } from "./composables/useMemoryGame";
-//   export type { GameState, Card, Level } from "./types";
 
-export {};
+export type {
+  Level,
+  LandmarkId,
+  Landmark,
+  Card,
+  GameStatus,
+  GameState,
+  LevelConfig,
+  HighscoreEntry,
+  Highscores,
+} from "./types";
+
+export { LEVELS, LEVEL_ORDER } from "./config/levels";
