@@ -4,9 +4,9 @@
    Single source of truth for colors (see guidelines: centralized design tokens). */
 @theme {
   --color-stage: #050505;
-  --color-card-back: #1e1e1e;
-  --color-card-back-line: #3a3a3a;
-  --color-card-face: #171717;
+  --color-card-back: #2b2b2b;
+  --color-card-back-line: #6b6b6b;
+  --color-card-face: #242424;
   --color-ui-text: #fafafa;
   --color-ui-muted: #9a9a9a;
   --color-accent: #ffffff;
@@ -17,6 +17,8 @@
   --animate-deal-in: deal-in 450ms cubic-bezier(0.22, 1, 0.36, 1) both;
   /* Short shake when a mismatched pair is revealed. */
   --animate-shake: shake 380ms ease-in-out;
+  /* Falling dot in the wordmark: drops in, tiny settle, holds, repeats. */
+  --animate-title-dot: title-dot 2.6s cubic-bezier(0.5, 0, 0.5, 1) infinite;
 }
 
 @keyframes match-glow {
@@ -61,9 +63,35 @@
   }
 }
 
+/* Falling dot in the wordmark: drops in, tiny settle, holds, repeats. */
+@keyframes title-dot {
+  0% {
+    transform: translateY(-8px);
+    opacity: 0.2;
+  }
+  22% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  30% {
+    transform: translateY(-2px);
+  }
+  40% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
 /* Soft key light behind the board so it reads as a lit stage. */
 @utility board-glow {
-  background: radial-gradient(ellipse 62% 58% at 50% 42%, rgba(255, 255, 255, 0.1), transparent 72%);
+  background: radial-gradient(
+    ellipse 62% 58% at 50% 42%,
+    rgba(255, 255, 255, 0.1),
+    transparent 72%
+  );
 }
 
 /* Fine animated film grain for an analog black-and-white photo feel. */
@@ -104,6 +132,13 @@
   );
 }
 
+/* Photo-inset backing behind a face-up landmark illustration: kept dark/subtle
+   (independent of card-back-pattern's brighter line) so the white line-art reads clearly. */
+@utility photo-inset-pattern {
+  background-color: var(--color-card-face);
+  background-image: repeating-linear-gradient(45deg, transparent 0 6px, #3a3a3a 6px 7px);
+}
+
 /* Card depth: drop shadow plus a top light highlight (lit from above). */
 @utility card-elevation {
   box-shadow:
@@ -124,9 +159,21 @@ body {
   min-height: 100dvh;
   background-color: var(--color-stage);
   /* Vignette so the board reads as a lit stage against near-black. */
-  background-image: radial-gradient(ellipse 90% 70% at 50% 18%, #1a1a1a 0%, #0b0b0b 40%, var(--color-stage) 75%);
+  background-image: radial-gradient(
+    ellipse 90% 70% at 50% 18%,
+    #1a1a1a 0%,
+    #0b0b0b 40%,
+    var(--color-stage) 75%
+  );
   background-attachment: fixed;
   color: var(--color-ui-text);
   font-family:
-    ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    Roboto,
+    Helvetica,
+    Arial,
+    sans-serif;
 }

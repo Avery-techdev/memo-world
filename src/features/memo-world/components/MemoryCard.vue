@@ -66,7 +66,7 @@ function onFlip(): void {
           "
         >
           <span
-            class="card-back-pattern grid flex-1 place-items-center rounded-xs border border-black/40 p-3 text-ui-text"
+            class="photo-inset-pattern grid flex-1 place-items-center rounded-xs border border-black/40 p-3 text-ui-text"
           >
             <LandmarkIllustration :landmark-id="card.landmarkId" />
           </span>
